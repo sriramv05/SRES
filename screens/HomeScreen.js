@@ -1,12 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import SOSButton from '../components/SOSButton';
+import { auth } from '../services/firebaseConfig';
 
 export default function HomeScreen() {
+  const handleLogout = async () => {
+    await auth.signOut();
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Smart Emergency Response</Text>
       <SOSButton />
+      <View style={{ marginTop: 30 }}>
+        <Button title="Logout" onPress={handleLogout} color="#e63946" />
+      </View>
     </View>
   );
 }

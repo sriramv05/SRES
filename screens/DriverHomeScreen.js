@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-// import { auth, db } from '../services/firebaseConfig';
-// import { collection, onSnapshot } from 'firebase/firestore';
+import { auth, db } from '../services/firebaseConfig';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { registerForPushNotificationsAsync } from '../services/notificationsServices';
 
 export default function DriverHomeScreen() {

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'; // <-- import useEffect correctly
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-// import { auth, db } from '../services/firebaseConfig';
+import { auth, db } from '../services/firebaseConfig';
 import * as Location from 'expo-location';
-// import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { registerForPushNotificationsAsync } from '../services/notificationsServices';
 
 export default function UserHomeScreen() {

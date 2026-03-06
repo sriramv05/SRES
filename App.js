@@ -23,18 +23,28 @@ export default function App() {
     registerForPushNotificationsAsync();
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+  if (!user) {
+    setUserRole(null);
+    setInitializing(false);
+    return;
+  }
 
-        if (docSnap.exists()) {
-          setUserRole(docSnap.data().role);
-        }
-      } else {
-        setUserRole(null);
-      }
-      setInitializing(false);
-    });
+  try {
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setUserRole(docSnap.data().role);
+    } else {
+      setUserRole(null);
+    }
+  } catch (error) {
+    console.log("Role fetch error:", error);
+    setUserRole(null);
+  }
+
+  setInitializing(false);
+});
 
     return unsubscribe;
   }, []);
@@ -65,16 +75,18 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {userRole === "user" ? (
-          <Stack.Screen name="UserHome" component={UserHomeScreen} />
-        ) : userRole === "driver" ? (
-          <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
-        ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    
+    {!userRole ? (
+      <Stack.Screen name="Login" component={LoginScreen} />
+    ) : userRole === "user" ? (
+      <Stack.Screen name="UserHome" component={UserHomeScreen} />
+    ) : (
+      <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
+    )}
+
+  </Stack.Navigator>
+</NavigationContainer>
   );
 }
