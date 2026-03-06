@@ -58,6 +58,9 @@ export default function UserHomeScreen() {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         timestamp: new Date(),
+        picked: false,
+        pickedBy: null,
+        status: "waiting",
       });
 
       Alert.alert('🚨 SOS Alert Sent', `Location: ${location.coords.latitude}, ${location.coords.longitude}`);
