@@ -8,6 +8,7 @@ import { auth, db } from "./services/firebaseConfig";
 import LoginScreen from "./screens/LoginScreen";
 import UserHomeScreen from "./screens/UserHomeScreen";
 import DriverHomeScreen from "./screens/DriverHomeScreen";
+import DriverPickupMap from "./screens/DriverPickupMap";
 
 import { View, ActivityIndicator, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
@@ -85,6 +86,7 @@ export default function App() {
     ) : (
       <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
     )}
+    <Stack.Screen name="DriverPickupMap" component={DriverPickupMap} />
 
   </Stack.Navigator>
 </NavigationContainer>

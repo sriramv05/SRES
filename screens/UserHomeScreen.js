@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'; // <-- import useEffect correctly
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import { auth, db } from '../services/firebaseConfig';
 import * as Location from 'expo-location';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, onSnapshot, query, where } from 'firebase/firestore';
 import { registerForPushNotificationsAsync } from '../services/notificationsServices';
 
 export default function UserHomeScreen() {
@@ -10,6 +10,49 @@ export default function UserHomeScreen() {
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
+
+  useEffect(() => {
+
+  const q = query(
+    collection(db, "sosAlerts"),
+    where("userId", "==", auth.currentUser.uid)
+  );
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+
+    snapshot.docChanges().forEach((change) => {
+
+      const data = change.doc.data();
+
+      if (change.type === "modified") {
+
+        if (data.status === "accepted") {
+
+          Alert.alert(
+            "SOS Update",
+            "A driver has accepted your SOS alert."
+          );
+
+        }
+
+        if (data.status === "completed") {
+
+          Alert.alert(
+            "SOS Update",
+            "Your emergency request has been completed."
+          );
+
+        }
+
+      }
+
+    });
+
+  });
+
+  return () => unsubscribe();
+
+}, []);
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -58,6 +101,9 @@ export default function UserHomeScreen() {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         timestamp: new Date(),
+
+        userId: auth.currentUser.uid,  
+
         picked: false,
         pickedBy: null,
         status: "waiting",
