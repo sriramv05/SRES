@@ -50,12 +50,30 @@ export default function DriverHomeScreen() {
       status: "accepted"
     });
 
+    try {
+
+      await updateDoc(doc(db, "trafficSignals", "signal1"), {
+        status: "green"
+      });
+
+      console.log("Traffic signal changed to GREEN");
+
+    } catch (error) {
+
+      console.log("Traffic signal update error:", error);
+
+    }
   };
+
 
   const completeSOS = async (alert) => {
 
     await updateDoc(doc(db, "sosAlerts", alert.id), {
       status: "completed"
+    });
+
+    await updateDoc(doc(db, "trafficSignals", "signal1"), {
+      status: "red"
     });
 
     Alert.alert("SOS Completed");
